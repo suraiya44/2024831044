@@ -14,9 +14,8 @@
 
 #define MAX_SNAKE_LENGTH 500
 
-// =========================
+
 // Snake Structure
-// =========================
 
 typedef struct
 {
@@ -30,9 +29,8 @@ typedef struct
 
 } Snake;
 
-// =========================
+
 // Global Variables
-// =========================
 
 Snake snake;
 
@@ -47,9 +45,8 @@ bool running = true;
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
-// =========================
+
 // Function Declarations
-// =========================
 
 void initializeSnake();
 void generateFood();
@@ -60,9 +57,8 @@ void renderGame();
 void restartGame();
 void cleanup();
 
-// =========================
+
 // Initialize Snake
-// =========================
 
 void initializeSnake()
 {
@@ -77,20 +73,19 @@ void initializeSnake()
     snake.x[2] = 8;
     snake.y[2] = 10;
 
-    // Moving right initially
     snake.dx = 1;
+    // Moving it right initially
     snake.dy = 0;
 }
 
-// =========================
+
 // Generate Food
-// =========================
 
 void generateFood()
 {
     bool validPosition = false;
 
-    while(!validPosition)
+    while(validPosition== false)
     {
         validPosition = true;
 
@@ -110,9 +105,8 @@ void generateFood()
     }
 }
 
-// =========================
+
 // Handle Input
-// =========================
 
 void handleInput()
 {
@@ -126,6 +120,7 @@ void handleInput()
         }
 
         if(event.type == SDL_KEYDOWN)
+        // checks if a key was pressed 
         {
             SDL_Keycode key = event.key.keysym.sym;
 
@@ -157,6 +152,7 @@ void handleInput()
 
             // Restart game
             if(gameOver && key == SDLK_r)
+            // game over and then we press SDLK_r
             {
                 restartGame();
             }
@@ -166,13 +162,13 @@ void handleInput()
             {
                 running = false;
             }
+
         }
     }
 }
 
-// =========================
+
 // Move Snake
-// =========================
 
 void moveSnake()
 {
@@ -184,6 +180,8 @@ void moveSnake()
     }
 
     // Move head
+    // moving right initially
+
     snake.x[0] += snake.dx;
     snake.y[0] += snake.dy;
 
@@ -204,9 +202,8 @@ void moveSnake()
     }
 }
 
-// =========================
+
 // Check Collision
-// =========================
 
 void checkCollision()
 {
@@ -228,6 +225,7 @@ void checkCollision()
     {
         if(snake.x[0] == snake.x[i] &&
            snake.y[0] == snake.y[i])
+          // x[0] y[0] (HEAD)== x[ith grid] y[ith grid]
         {
             gameOver = true;
 
@@ -240,64 +238,64 @@ void checkCollision()
     }
 }
 
-// =========================
+
 // Render Game
-// =========================
 
 void renderGame()
 {
     // creates a Black background before every new frame
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-     SDL_RenderClear(renderer);
+    SDL_RenderClear(renderer);
 
     // Draw snake
     for(int i = 0; i < snake.length; i++)
     {
         SDL_Rect segment;
-
         segment.x = snake.x[i] * CELL_SIZE;
         segment.y = snake.y[i] * CELL_SIZE;
         segment.w = CELL_SIZE;
         segment.h = CELL_SIZE;
+        // creates a rectangle called segment
 
-        // Snake head color
         if(i == 0)
         {
+            // Snake head color
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         }
 
-        // Snake body color
         else
         {
+             // Snake body color
             SDL_SetRenderDrawColor(renderer, 0, 180, 0, 255);
         }
 
         SDL_RenderFillRect(renderer, &segment);
+        // fills the segment rectangle with current color
+
     }
 
     // Draw food
-    SDL_Rect food;
 
+    SDL_Rect food;
     food.x = foodX * CELL_SIZE;
     food.y = foodY * CELL_SIZE;
     food.w = CELL_SIZE;
     food.h = CELL_SIZE;
+    // creates a rectangle called food
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
     SDL_RenderFillRect(renderer, &food);
+    // fills the food rectangle with current color
 
-    // presents the newest frame on the black background 
+    // presents the newest frame on the black background
     SDL_RenderPresent(renderer);
-
 }
 
-// =========================
+
 // Restart Game
-// =========================
 
 void restartGame()
-// restart the game with input handling
 {
     score = 0;
     gameOver = false;
@@ -308,14 +306,12 @@ void restartGame()
     printf("\nGame Restarted!\n");
 }
 
-// =========================
+
 // Cleanup
-// =========================
 
 void cleanup()
 {
     if(renderer != NULL)
-   // renderer != NULL
     {
         SDL_DestroyRenderer(renderer);
     }
@@ -328,9 +324,8 @@ void cleanup()
     SDL_Quit();
 }
 
-// =========================
+
 // Main Function
-// =========================
 
 int main(int argc, char* argv[])
 {
@@ -383,10 +378,12 @@ int main(int argc, char* argv[])
     // Main Game Loop
     while(running)
     {
+        // handles input
         handleInput();
 
         if(!gameOver)
         {
+        // moving the snake
             moveSnake();
 
             checkCollision();
@@ -394,7 +391,7 @@ int main(int argc, char* argv[])
 
         renderGame();
 
-        SDL_Delay(100);
+        SDL_Delay(200);
     }
 
     cleanup();

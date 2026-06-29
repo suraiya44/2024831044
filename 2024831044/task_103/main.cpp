@@ -182,7 +182,9 @@ void draw()
     {
         //drawing circle no.1
        SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+
     centerX= setCircleCoords(&centerX); 
+    
     drawCircle(renderer, centerX, SCREEN_HEIGHT/2, radius);
      
     // drawing circle no.2
