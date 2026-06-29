@@ -79,35 +79,8 @@ void initializeSnake()
 }
 
 
-// Generate Food
-
-void generateFood()
-{
-    bool validPosition = false;
-
-    while(validPosition== false)
-    {
-        validPosition = true;
-
-        foodX = rand() % GRID_WIDTH;
-        foodY = rand() % GRID_HEIGHT;
-
-        // Prevent food spawning on snake
-        for(int i = 0; i < snake.length; i++)
-        {
-            if(foodX == snake.x[i] &&
-               foodY == snake.y[i])
-            {
-                validPosition = false;
-                break;
-            }
-        }
-    }
-}
-
-
 // Handle Input
-
+// its just changes the direction of the snake
 void handleInput()
 {
     SDL_Event event;
@@ -127,6 +100,7 @@ void handleInput()
             // Prevent direct reverse movement
 
             if(key == SDLK_UP && snake.dy == 0)
+            // prevents reverse movement in vertical motion
             {
                 snake.dx = 0;
                 snake.dy = -1;
@@ -139,6 +113,7 @@ void handleInput()
             }
 
             else if(key == SDLK_LEFT && snake.dx == 0)
+            // prevents reverse movement while moving right, cause then dx=  not 0
             {
                 snake.dx = -1;
                 snake.dy = 0;
@@ -191,6 +166,9 @@ void moveSnake()
     {
         if(snake.length < MAX_SNAKE_LENGTH)
         {
+            snake.x[snake.length] = snake.x[snake.length - 1];
+            snake.y[snake.length] = snake.y[snake.length - 1];
+            
             snake.length++;
         }
 
@@ -199,6 +177,33 @@ void moveSnake()
         printf("Score: %d\n", score);
 
         generateFood();
+    }
+}
+
+
+// Generate Food
+
+void generateFood()
+{
+    bool validPosition = false;
+
+    while(validPosition== false)
+    {
+        validPosition = true;
+
+        foodX = rand() % GRID_WIDTH;
+        foodY = rand() % GRID_HEIGHT;
+
+        // Prevent food spawning on snake
+        for(int i = 0; i < snake.length; i++)
+        {
+            if(foodX == snake.x[i] &&
+               foodY == snake.y[i])
+            {
+                validPosition = false;
+                break;
+            }
+        }
     }
 }
 
